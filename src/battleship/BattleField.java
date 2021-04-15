@@ -4,6 +4,7 @@ import java.security.InvalidParameterException;
 import java.util.Arrays;
 
 import static java.lang.Math.max;
+import static java.lang.Math.min;
 
 public class BattleField {
     Cell[][] cells;
@@ -21,15 +22,17 @@ public class BattleField {
         if (ship == null || x < 1 || x > 10 || y < 1 || y > 10) {
             throw new InvalidParameterException();
         }
-        if (!isFree(max(0, x - 1), max(0, y - 1),
-                direction == Direction.HORIZONTAL ? x + ship.length : x + 1,
-                direction == Direction.HORIZONTAL ? y + 1 : y + ship.length)) {
+        if (!isFree(max(1, x - 1), max(1, y - 1),
+                min(10, direction == Direction.HORIZONTAL ? x + ship.length : x + 1),
+                min(10, direction == Direction.HORIZONTAL ? y + 1 : y + ship.length))) {
             throw new InvalidParameterException();
         }
 
         for (int i = 0; i < ship.length; i++) {
             if (direction == Direction.HORIZONTAL) {
-                cells[y][x + i].place(ship, i);
+                cells[y - 1][x + i - 1].place(ship, i);
+            } else {
+                cells[y + i - 1][x - 1].place(ship, i);
             }
         }
     }
@@ -40,7 +43,7 @@ public class BattleField {
         }
         for (int x = xFrom; x <= xTo; x++) {
             for (int y = yFrom; y <= yTo; y++) {
-                if (!cells[y][x].isFree()) {
+                if (!cells[y - 1][x - 1].isFree()) {
                     return false;
                 }
             }

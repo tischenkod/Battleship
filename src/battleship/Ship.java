@@ -1,13 +1,13 @@
 package battleship;
 
 public class Ship {
-    int name;
+    String name;
     int length;
     boolean[] damaged;
 
-    public Ship(int name, int length) {
-        this.name = name;
-        this.length = length;
+    public Ship(ShipType shipType) {
+        this.name = shipType.name;
+        this.length = shipType.length;
         damaged = new boolean[length];
     }
 
