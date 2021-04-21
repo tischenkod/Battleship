@@ -2,12 +2,11 @@ package battleship;
 
 import java.security.InvalidParameterException;
 
-import static java.lang.Math.max;
-import static java.lang.Math.min;
+import static java.lang.Math.*;
+import static java.lang.Math.abs;
 
 public class BattleField {
     int shipCount;
-
     Cell[][] cells;
 
     public BattleField() {
@@ -75,10 +74,78 @@ public class BattleField {
         return sb.toString();
     }
 
-    public HitResult hit(Coordinates c) {
+    public HitResult hit() {
+        Coordinates c = getHit();
         HitResult hr = cells[c.y - 1][c.x - 1].hit();
         if (hr.equals(HitResult.SANK) && (--shipCount == 0))
             return HitResult.WON;
         return hr;
     }
+
+    public void addShips() {
+        for (ShipType shipType: ShipType.values()) {
+            System.out.println(this);
+            while (true) {
+                System.out.printf("%nEnter the coordinates of the %s (%d cells):%n",
+                        shipType.name,
+                        shipType.length);
+                String[] placement = Input.nextLine().
+                        replaceAll("\\s{2,}", " ").
+                        trim().
+                        toLowerCase().
+                        split(" ");
+                if (placement.length != 2 ||
+                        !placement[0].matches("[a-j](10|[1-9])") ||
+                        !placement[1].matches("[a-j](10|[1-9])")) {
+                    System.out.println("Error:\nInput must match the pattern \"[a-jA-J]([1-9]|10)]\" \"[a-jA-J]([1-9]|10)]\"");
+                    continue;
+                }
+
+                int x1 = Integer.parseInt(placement[0].substring(1));
+                int y1 = 1 + placement[0].charAt(0) - 'a';
+                int x2 = Integer.parseInt(placement[1].substring(1));
+                int y2 = 1 + placement[1].charAt(0) - 'a';
+
+                if (x1 == x2) {
+                    if (abs(y1 - y2) + 1 != shipType.length) {
+                        System.out.println("Error:\nInvalid ship length");
+                        continue;
+                    }
+                    try {
+                        place(new Ship(shipType), x1, min(y1, y2), Direction.VERTICAL);
+                        break;
+                    } catch (Exception exception){
+                        System.out.println("Error:\n" + exception.getMessage());
+                    }
+                } else {
+                    if (y1 == y2) {
+                        if (abs(x1 - x2) + 1 != shipType.length) {
+                            System.out.println("Error:\nInvalid ship length");
+                            continue;
+                        }
+                        try {
+                            place(new Ship(shipType), min(x1, x2), y1, Direction.HORIZONTAL);
+                            break;
+                        } catch (Exception exception){
+                            System.out.println("Error:\n" + exception.getMessage());
+                        }
+                    } else {
+                        System.out.println("Error:\nShip must be oriented vertically or horizontally");
+                    }
+                }
+            }
+        }
+        System.out.println(this);
+    }
+
+    private Coordinates getHit() {
+        while (true) {
+            try {
+                return new Coordinates(Input.nextLine());
+            } catch (InvalidParameterException ip) {
+                System.out.println(ip.getMessage());
+            }
+        }
+    }
+
 }
