@@ -20,7 +20,6 @@ public class Game {
         for (ShipType shipType: ShipType.values()) {
             System.out.println(battleField);
             while (true) {
-
                 System.out.printf("%nEnter the coordinates of the %s (%d cells):%n",
                         shipType.name,
                         shipType.length);
@@ -72,5 +71,14 @@ public class Game {
             }
         }
         System.out.println(battleField);
+    }
+
+    public Coordinates askForShot() {
+        System.out.println("Take a shot!");
+        return new Coordinates(scanner.nextLine());
+    }
+
+    public void hit(Coordinates c) {
+        battleField.hit(c);
     }
 }

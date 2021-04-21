@@ -25,4 +25,14 @@ public class Cell {
             return ship.toChar(pos);
         }
     }
+
+    public boolean hit() {
+        if (damaged)
+            return false;
+        damaged = true;
+        if (ship == null)
+            return false;
+        ship.hit(pos);
+        return true;
+    }
 }

@@ -1,7 +1,6 @@
 package battleship;
 
 import java.security.InvalidParameterException;
-import java.util.Arrays;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -62,5 +61,15 @@ public class BattleField {
             }
         }
         return sb.toString();
+    }
+
+    public void hit(Coordinates c) {
+        boolean hr = cells[c.y - 1][c.x - 1].hit();
+        System.out.println(this);
+        if (hr) {
+            System.out.println("You hit a ship!");
+        } else {
+            System.out.println("You missed!");
+        }
     }
 }
