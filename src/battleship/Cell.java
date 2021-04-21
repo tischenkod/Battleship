@@ -26,13 +26,12 @@ public class Cell {
         }
     }
 
-    public boolean hit() {
+    public HitResult hit() {
         if (damaged)
-            return false;
+            return HitResult.MISS;
         damaged = true;
         if (ship == null)
-            return false;
-        ship.hit(pos);
-        return true;
+            return HitResult.MISS;
+        return ship.hit(pos);
     }
 }

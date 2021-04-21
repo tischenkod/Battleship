@@ -18,7 +18,12 @@ public class Ship {
         return damaged[pos] ? 'X' : 'O';
     }
 
-    public void hit(int pos) {
+    public HitResult hit(int pos) {
         damaged[pos] = true;
+        for (boolean item: damaged) {
+            if (!item)
+                return HitResult.HIT;
+        }
+        return HitResult.SANK;
     }
 }

@@ -1,5 +1,6 @@
 package battleship;
 
+import java.security.InvalidParameterException;
 import java.util.Scanner;
 
 import static java.lang.Math.abs;
@@ -73,12 +74,28 @@ public class Game {
         System.out.println(battleField);
     }
 
-    public Coordinates askForShot() {
-        System.out.println("Take a shot!");
+    Coordinates askForShot() {
+
         return new Coordinates(scanner.nextLine());
     }
 
-    public void hit(Coordinates c) {
-        battleField.hit(c);
+    public void run() {
+        System.out.println("The game starts!");
+        System.out.println(battleField.toString(true));
+        System.out.println("Take a shot!");
+        while (battleField.getShipCount() > 0) {
+            Coordinates c;
+            while (true) {
+                try {
+                    c = askForShot();
+                    break;
+                } catch (InvalidParameterException ip) {
+                    System.out.println(ip.getMessage());
+                }
+            }
+            HitResult hr = battleField.hit(c);
+            System.out.println(battleField);
+            System.out.println(hr);
+        }
     }
 }

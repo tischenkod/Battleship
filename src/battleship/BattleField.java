@@ -6,15 +6,22 @@ import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 public class BattleField {
+    int shipCount;
+
     Cell[][] cells;
 
     public BattleField() {
+        shipCount = 0;
         cells = new Cell[10][10];
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
                 cells[i][j] = new Cell();
             }
         }
+    }
+
+    public int getShipCount() {
+        return shipCount;
     }
 
     void place(Ship ship, int x, int y, Direction direction) {
@@ -34,6 +41,7 @@ public class BattleField {
                 cells[y + i - 1][x - 1].place(ship, i);
             }
         }
+        shipCount++;
     }
 
     private boolean isFree(int xFrom, int yFrom, int xTo, int yTo) {
@@ -67,13 +75,10 @@ public class BattleField {
         return sb.toString();
     }
 
-    public void hit(Coordinates c) {
-        boolean hr = cells[c.y - 1][c.x - 1].hit();
-        System.out.println(toString(true));
-        if (hr) {
-            System.out.println("You hit a ship!");
-        } else {
-            System.out.println("You missed!");
-        }
+    public HitResult hit(Coordinates c) {
+        HitResult hr = cells[c.y - 1][c.x - 1].hit();
+        if (hr.equals(HitResult.SANK) && (--shipCount == 0))
+            return HitResult.WON;
+        return hr;
     }
 }
