@@ -52,12 +52,16 @@ public class BattleField {
 
     @Override
     public String toString() {
+        return toString(false);
+    }
+
+    public String toString(boolean fog) {
         StringBuilder sb = new StringBuilder("  1 2 3 4 5 6 7 8 9 10");
         char letter = 'A';
         for (int i = 0; i < 10; i++) {
             sb.append('\n').append(letter++);
             for (int j = 0; j < 10; j++) {
-                sb.append(' ').append(cells[i][j].toChar());
+                sb.append(' ').append(cells[i][j].toChar(fog));
             }
         }
         return sb.toString();
@@ -65,7 +69,7 @@ public class BattleField {
 
     public void hit(Coordinates c) {
         boolean hr = cells[c.y - 1][c.x - 1].hit();
-        System.out.println(this);
+        System.out.println(toString(true));
         if (hr) {
             System.out.println("You hit a ship!");
         } else {

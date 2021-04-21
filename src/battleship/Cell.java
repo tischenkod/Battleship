@@ -18,11 +18,11 @@ public class Cell {
         damaged = false;
     }
 
-    public char toChar() {
+    public char toChar(boolean fog) {
         if (ship == null) {
             return damaged ? 'M' : '~';
         } else {
-            return ship.toChar(pos);
+            return !fog || damaged ? ship.toChar(pos) : '~';
         }
     }
 

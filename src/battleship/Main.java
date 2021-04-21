@@ -7,6 +7,7 @@ public class Main {
     public static void main(String[] args) {
         Game game = new Game();
         System.out.println("The game starts!");
+        System.out.println(game.battleField.toString(true));
         Coordinates c;
         while (true) {
             try {
@@ -17,5 +18,6 @@ public class Main {
             }
         }
         game.hit(c);
+        System.out.println(game.battleField);
     }
 }
